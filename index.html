@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tracking</title>
+</head>
+<body>
+    <h2>Track Shipment</h2>
+    <input type="text" id="ConsignmentID" placeholder="Enter Consignment ID">
+    <button onclick="lookupProduct()">Track</button>
+    <div id="productInfo"></div>
+
+    <script>
+        function lookupProduct() {
+            const ConsignmentID = document.getElementById('ConsignmentID').value;
+            fetch(`https://sheets.googleapis.com/v4/spreadsheets/1nSXHrCCRlhEY4E2qynZVmEqZWZUeQgQKqeJWUBXVkWw/values/Sheet1?key=AIzaSyBVnTBZRxMk_nkr5k0k7D6Ejyj-_zhBbmU`)
+                .then(response => response.json())
+                .then(data => {
+                    const rows = data.values;
+                    const product = rows.find(row => row[0] === ConsignmentID);
+                    if (product) {
+                        document.getElementById('productInfo').innerHTML = `Destination: ${product[1]}<br>Origin: ${product[2]}<br>Current Location: ${product[3]}<br>Status: ${product[4]}`;
+                    } else {
+                        document.getElementById('productInfo').innerHTML = 'Consignment not found';
+                    }
+                });
+        }
+    </script>
+</body>
+</html>
